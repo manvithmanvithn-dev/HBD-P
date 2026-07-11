@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM_DIAGNOSTIC // RUNTIME</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="terminal-box" id="prankTerminal">
+        <div class="terminal-header">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="terminal-title">bash — diagnostic_node_v4.1.sh</span>
+        </div>
+        <div class="terminal-body" id="logContainer">
+            </div>
+    </div>
+
+    <div class="card-wrapper dynamic-hide" id="celebrationCanvas">
+        <div class="badge-icon">🎉</div>
+        <h1>Happy Birthday</h1>
+        <p class="description">
+            Wishing you a brilliant day filled with happiness, success, and beautiful moments. May this loop of another great year bring incredible growth, outstanding milestones, and endless joy into your journey!
+        </p>
+        <button class="primary-btn" onclick="handleRevealSequence(event)">Tap to Reveal ✨</button>
+    </div>
+
+    <div class="card-wrapper dynamic-hide special-note-card" id="specialNote">
+        <div class="badge-icon">✨</div>
+        <h1 class="sub-gradient">A Toast to You</h1>
+        <p class="description">
+            True friends are rare, and having you in my life is something I appreciate every day. Here is to making more memories, crushing goals, and staying legendary. Enjoy your day to the absolute fullest!
+        </p>
+    </div>
+
+    <script>
+        // Fetch completely safe, real device properties to surprise the developer friend
+        const screenRes = `${window.screen.width}x${window.screen.height}`;
+        const cores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Cores` : "Detected";
+        const platform = navigator.platform || "Unknown OS";
+
+        const logSequences = [
+            "Initializing remote environment audit...",
+            `Target Architecture: ${platform} // Spec Resolution: ${screenRes}`,
+            `Validating CPU Allocation: ${cores}... Connected.`,
+            "Analyzing browser sandbox memory heap allocation...",
+            "CRITICAL: Resource thread vulnerability identified in stylesheet layer.",
+            "Bypassing active session parameters... [OK]",
+            "Injecting custom configuration profile blocks...",
+            "Parsing client asset database arrays...",
+            "STATUS: Compiling local validation sequence matrix...",
+            "SUCCESS: Located 1 priority file packet: 'Friend_Surprise.pkg'",
+            "Halting simulation sandbox. Redirecting runtime assets..."
+        ];
+
+        const logContainer = document.getElementById('logContainer');
+        let index = 0;
+
+        function printLogs() {
+            if (index < logSequences.length) {
+                const line = document.createElement('div');
+                line.className = 'log-line';
+                
+                let text = `[diagnostics] ${logSequences[index]}`;
+                if (text.includes("CRITICAL")) {
+                    line.innerHTML = `<span class="text-danger">${text}</span>`;
+                } else if (text.includes("[OK]") || text.includes("SUCCESS")) {
+                    line.innerHTML = text.replace("[OK]", '<span class="text-success">[OK]</span>').replace("SUCCESS", '<span class="text-success">SUCCESS</span>');
+                } else {
+                    line.textContent = text;
+                }
+
+                logContainer.appendChild(line);
+                // Auto Scroll inside terminal box
+                logContainer.scrollTop = logContainer.scrollHeight;
+                index++;
+                setTimeout(printLogs, Math.random() * 150 + 100);
+            } else {
+                setTimeout(transitionToCard, 1000);
+            }
+        }
+
+        function transitionToCard() {
+            const terminal = document.getElementById('prankTerminal');
+            const card = document.getElementById('celebrationCanvas');
+
+            terminal.style.opacity = '0';
+            terminal.style.transform = 'scale(0.95)';
+
+            setTimeout(() => {
+                terminal.style.display = 'none';
+                card.style.display = 'block';
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'scale(1)';
+                }, 50);
+            }, 400);
+        }
+
+        function handleRevealSequence(e) {
+            burstConfetti(e);
+            const noteCard = document.getElementById('specialNote');
+            if (noteCard.classList.contains('dynamic-hide')) {
+                noteCard.style.display = 'block';
+                setTimeout(() => {
+                    noteCard.classList.remove('dynamic-hide');
+                    noteCard.style.opacity = '1';
+                    noteCard.style.transform = 'scale(1)';
+                    noteCard.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        }
+
+        function burstConfetti(e) {
+            const palette = ['#a855f7', '#ec4899', '#ff7b00', '#3b82f6', '#10b981'];
+            const rect = e.target.getBoundingClientRect();
+            for (let i = 0; i < 65; i++) {
+                const item = document.createElement('div');
+                item.style.position = 'absolute';
+                item.style.width = `${Math.random() * 8 + 6}px`;
+                item.style.height = `${Math.random() * 12 + 6}px`;
+                item.style.backgroundColor = palette[Math.floor(Math.random() * palette.length)];
+                item.style.left = `${rect.left + rect.width / 2}px`;
+                item.style.top = `${rect.top + rect.height / 2}px`;
+                item.style.pointerEvents = 'none';
+                item.style.zIndex = '999';
+                document.body.appendChild(item);
+
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * 200 + 60;
+                const x = Math.cos(angle) * dist;
+                const y = Math.sin(angle) * dist;
+
+                const a = item.animate([
+                    { transform: 'translate(-50%, -50%) rotate(0deg) scale(1)', opacity: 1 },
+                    { transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${Math.random() * 360}deg) scale(0)`, opacity: 0 }
+                ], { duration: 900, easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)' });
+                a.onfinish = () => item.remove();
+            }
+        }
+
+        window.onload = () => setTimeout(printLogs, 600);
+    </script>
+</body>
+</html>
