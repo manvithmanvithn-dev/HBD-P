@@ -186,4 +186,512 @@
     .badge-dot {
       width: 6px;
       height: 6px;
-      border-radius
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .product-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.4rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .product-desc {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-dim);
+      margin-bottom: 35px;
+      min-height: 55px;
+    }
+
+    /* Audio Equalizer HUD Widget */
+    .visualizer-box {
+      background: var(--card-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px 24px;
+      backdrop-filter: blur(16px);
+      margin-bottom: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .vis-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .vis-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+    }
+
+    .vis-status {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .equalizer {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 28px;
+    }
+
+    .eq-bar {
+      width: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--accent);
+      animation: eqBounce 1.2s ease-in-out infinite alternate;
+    }
+
+    .eq-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; }
+    .eq-bar:nth-child(2) { height: 80%; animation-delay: 0.3s; }
+    .eq-bar:nth-child(3) { height: 100%; animation-delay: 0.2s; }
+    .eq-bar:nth-child(4) { height: 60%; animation-delay: 0.5s; }
+    .eq-bar:nth-child(5) { height: 90%; animation-delay: 0.4s; }
+    .eq-bar:nth-child(6) { height: 50%; animation-delay: 0.6s; }
+
+    @keyframes eqBounce {
+      0% { height: 20%; }
+      100% { height: 100%; }
+    }
+
+    /* Interactive Color Variant Pickers */
+    .variant-selector {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .variant-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .variant-btn:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .variant-btn.active {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb), 0.1);
+      box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.2);
+    }
+
+    .color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    /* Right Showcase: 3D Holographic Stage */
+    .stage-wrapper {
+      perspective: 1200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .holo-card {
+      width: 440px;
+      height: 560px;
+      background: var(--card-surface);
+      border: 1px solid var(--border-glow);
+      border-radius: 28px;
+      backdrop-filter: blur(24px);
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.02);
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, border-color 0.5s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Futuristic HUD Reticle Elements */
+    .hud-reticle {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: rotateHud 40s linear infinite;
+    }
+
+    .hud-reticle-inner {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    @keyframes rotateHud {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Floating Center Visual Asset */
+    .hero-asset {
+      font-size: 8.5rem;
+      transform: translateZ(80px);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.9));
+      user-select: none;
+    }
+
+    /* Telemetry Diagnostics Overlay */
+    .holo-card .telemetry-tag {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      transform: translateZ(30px);
+    }
+
+    .telemetry-grid {
+      position: absolute;
+      bottom: 24px;
+      width: calc(100% - 48px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      transform: translateZ(40px);
+    }
+
+    .tele-cell {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 10px 14px;
+      border-radius: 10px;
+    }
+
+    .tele-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .tele-val {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 1024px) {
+      .showcase {
+        grid-template-columns: 1fr;
+        padding-top: 40px;
+        gap: 50px;
+      }
+      .stage-wrapper { order: -1; }
+      .holo-card { width: 100%; max-width: 400px; height: 500px; }
+      .product-title { font-size: 2.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="canvas-bg"></canvas>
+  <div class="ambient-glow" id="ambientGlow"></div>
+
+  <header>
+    <div class="brand">
+      <div class="brand-pill"></div>
+      AURA<span style="color: var(--accent);">.X</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#" data-glitch="Hardware">Hardware</a></li>
+      <li><a href="#" data-glitch="Architecture">Architecture</a></li>
+      <li><a href="#" data-glitch="Neural Driver">Neural Driver</a></li>
+    </ul>
+    <button class="action-btn">Pre-Order Spec</button>
+  </header>
+
+  <main class="showcase">
+    <div class="content-area">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span id="batchTag">Neural Spatial Array // Gen-4</span>
+      </div>
+
+      <h1 class="product-title" id="titleDisplay">AURA // SPECTRE</h1>
+      <p class="product-desc" id="descDisplay">
+        Beryllium dynamic transducers coupled with sub-millisecond neural audio reconstruction. Immersive spatial resolution calibrated for sonic purists.
+      </p>
+
+      <div class="visualizer-box">
+        <div class="vis-info">
+          <span class="vis-title">Acoustic Calibration</span>
+          <span class="vis-status" id="profileDisplay">Dolby Atmos // 96kHz Lossless</span>
+        </div>
+        <div class="equalizer">
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+        </div>
+      </div>
+
+      <div class="variant-selector">
+        <button class="variant-btn active" onclick="setVariant(0)">
+          <span class="color-dot" style="background: #00f0ff; color: #00f0ff;"></span>
+          Cyan Matrix
+        </button>
+        <button class="variant-btn" onclick="setVariant(1)">
+          <span class="color-dot" style="background: #ff0055; color: #ff0055;"></span>
+          Crimson Core
+        </button>
+        <button class="variant-btn" onclick="setVariant(2)">
+          <span class="color-dot" style="background: #a855f7; color: #a855f7;"></span>
+          Violet Pulse
+        </button>
+      </div>
+    </div>
+
+    <div class="stage-wrapper" id="stageWrap">
+      <div class="holo-card" id="holoCard">
+        <div class="telemetry-tag">TELEMETRY // LIVE</div>
+        <div class="hud-reticle"></div>
+        <div class="hud-reticle-inner"></div>
+
+        <div class="hero-asset" id="assetDisplay">🎧</div>
+
+        <div class="telemetry-grid">
+          <div class="tele-cell">
+            <div class="tele-label">Latency Factor</div>
+            <div class="tele-val" id="latencyVal">0.42 ms</div>
+          </div>
+          <div class="tele-cell">
+            <div class="tele-label">Dynamic Headroom</div>
+            <div class="tele-val" id="headroomVal">+18 dBFS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    /* Data Models for Dynamic Variants */
+    const models = [
+      {
+        title: "AURA // SPECTRE",
+        tag: "Neural Spatial Array // Gen-4",
+        desc: "Beryllium dynamic transducers coupled with sub-millisecond neural audio reconstruction. Immersive spatial resolution calibrated for sonic purists.",
+        profile: "Dolby Atmos // 96kHz Lossless",
+        icon: "🎧",
+        accent: "#00f0ff",
+        accentRgb: "0, 240, 255",
+        latency: "0.42 ms",
+        headroom: "+18 dBFS"
+      },
+      {
+        title: "VORTEX // HYPERION",
+        tag: "Planar Magnetic Array // Overclocked",
+        desc: "Engineered with ultra-thin nanometer diaphragms for razor-sharp transients and visceral bass extension. Tuned specifically for cinematic workloads.",
+        profile: "Spatial 3D // 192kHz Master Audio",
+        icon: "🎙️",
+        accent: "#ff0055",
+        accentRgb: "255, 0, 85",
+        latency: "0.18 ms",
+        headroom: "+24 dBFS"
+      },
+      {
+        title: "SYNAPSE // NEBULA",
+        tag: "Bio-Synthetic Sensor // Adaptive",
+        desc: "Adaptive active acoustic filtering driven by biometric telemetry. Balances frequency response in real time to match ear canal geometry.",
+        profile: "AI Adaptive // Zero-Loss Direct",
+        icon: "🔮",
+        accent: "#a855f7",
+        accentRgb: "168, 85, 247",
+        latency: "0.31 ms",
+        headroom: "+15 dBFS"
+      }
+    ];
+
+    /* Text Decoding Glitch Animation */
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+    function glitchText(element, finalText) {
+      let iteration = 0;
+      clearInterval(element.interval);
+      
+      element.interval = setInterval(() => {
+        element.innerText = finalText
+          .split("")
+          .map((letter, index) => {
+            if (index < iteration) return finalText[index];
+            return letters[Math.floor(Math.random() * letters.length)];
+          })
+          .join("");
+
+        if (iteration >= finalText.length) {
+          clearInterval(element.interval);
+        }
+        iteration += 1 / 2;
+      }, 25);
+    }
+
+    /* Switch Model Handler */
+    function setVariant(index) {
+      const active = models[index];
+
+      // Update Root Colors
+      document.documentElement.style.setProperty('--accent', active.accent);
+      document.documentElement.style.setProperty('--accent-rgb', active.accentRgb);
+
+      // Update Variant Buttons
+      document.querySelectorAll('.variant-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+      });
+
+      // Update Content with Glitch Animation
+      glitchText(document.getElementById('titleDisplay'), active.title);
+      document.getElementById('batchTag').innerText = active.tag;
+      document.getElementById('descDisplay').innerText = active.desc;
+      document.getElementById('profileDisplay').innerText = active.profile;
+      document.getElementById('assetDisplay').innerText = active.icon;
+      document.getElementById('latencyVal').innerText = active.latency;
+      document.getElementById('headroomVal').innerText = active.headroom;
+    }
+
+    /* 3D Tilt Logic on Mouse Move */
+    const card = document.getElementById("holoCard");
+    const stage = document.getElementById("stageWrap");
+
+    window.addEventListener("mousemove", (e) => {
+      const rect = stage.getBoundingClientRect();
+      const x = e.clientX - (rect.left + rect.width / 2);
+      const y = e.clientY - (rect.top + rect.height / 2);
+
+      const rotateX = (-y / 20).toFixed(2);
+      const rotateY = (x / 20).toFixed(2);
+
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    stage.addEventListener("mouseleave", () => {
+      card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+
+    /* Interactive Particle System */
+    const canvas = document.getElementById("canvas-bg");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let mouse = { x: null, y: null };
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    window.addEventListener("mousemove", (e) => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = Math.random() * 0.8 - 0.4;
+        this.speedY = Math.random() * 0.8 - 0.4;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x > canvas.width) this.x = 0;
+        else if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        else if (this.y < 0) this.y = canvas.height;
+      }
+      draw() {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      const particleCount = Math.floor(window.innerWidth / 16);
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    }
+    initParticles();
+
+    function renderParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+
+        for (let j = i; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.08 - dist / 1400})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(renderParticles);
+    }
+    renderParticles();
+  </script>
+</body>
+</html>
