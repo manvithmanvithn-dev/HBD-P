@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AURA // Neural Acoustic Architecture</title>
+  <title>StreamVibe // Next-Gen Video Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --accent: #00f0ff;
-      --accent-rgb: 0, 240, 255;
-      --bg-dark: #03060c;
-      --card-surface: rgba(10, 16, 28, 0.7);
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-glow: rgba(0, 240, 255, 0.35);
+      --bg-main: #0c0f17;
+      --bg-sidebar: #121722;
+      --card-bg: #182030;
+      --accent: #ff0055;
+      --accent-glow: rgba(255, 0, 85, 0.3);
       --text-main: #f8fafc;
-      --text-dim: #94a3b8;
+      --text-muted: #94a3b8;
+      --border-subtle: rgba(255, 255, 255, 0.08);
     }
 
     * {
@@ -25,673 +25,459 @@
       padding: 0;
       box-sizing: border-box;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-font-smoothing: antialiased;
     }
 
     body {
-      background-color: var(--bg-dark);
+      background-color: var(--bg-main);
       color: var(--text-main);
-      min-height: 100vh;
-      overflow-x: hidden;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    aside {
+      width: 240px;
+      background-color: var(--bg-sidebar);
+      border-right: 1px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
-      position: relative;
-    }
-
-    /* Ambient Canvas Particle Layer */
-    #canvas-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* Radial Ambient Vignette */
-    .ambient-glow {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 800px;
-      height: 800px;
-      background: radial-gradient(circle, rgba(var(--accent-rgb), 0.12) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-      transition: background 0.8s ease;
-    }
-
-    /* Header & Navigation */
-    header {
-      position: relative;
-      z-index: 10;
-      display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding: 30px 8%;
+      padding: 24px 16px;
+      flex-shrink: 0;
     }
 
     .brand {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 900;
-      font-size: 1.4rem;
-      letter-spacing: 4px;
-      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 1px;
       display: flex;
       align-items: center;
       gap: 10px;
+      padding-left: 10px;
+      margin-bottom: 30px;
     }
 
-    .brand-pill {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 12px var(--accent);
+    .brand span {
+      color: var(--accent);
     }
 
-    .nav-links {
-      display: flex;
-      gap: 36px;
+    .nav-list {
       list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .nav-links a {
-      color: var(--text-dim);
-      text-decoration: none;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .nav-links a:hover {
-      color: #fff;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 0;
-      width: 0%;
-      height: 2px;
-      background: var(--accent);
-      transition: width 0.3s ease;
-      box-shadow: 0 0 8px var(--accent);
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    .action-btn {
-      background: rgba(var(--accent-rgb), 0.08);
-      border: 1px solid var(--border-glow);
-      color: #fff;
-      padding: 12px 28px;
-      border-radius: 30px;
-      font-size: 0.85rem;
-      letter-spacing: 1.5px;
-      font-weight: 600;
-      text-transform: uppercase;
-      cursor: pointer;
-      backdrop-filter: blur(12px);
-      transition: all 0.3s ease;
-    }
-
-    .action-btn:hover {
-      background: var(--accent);
-      color: #000;
-      box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.5);
-      transform: translateY(-2px);
-    }
-
-    /* Main Grid Layout */
-    .showcase {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
+    .nav-item {
+      display: flex;
       align-items: center;
-      padding: 0 8% 50px;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background-color: rgba(255, 0, 85, 0.1);
+      color: #fff;
+    }
+
+    .nav-item.active {
+      color: var(--accent);
+      border-left: 3px solid var(--accent);
+    }
+
+    /* Main Content Wrapper */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    /* Top Navigation */
+    header {
+      padding: 18px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(12, 15, 23, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .search-box {
       position: relative;
-      z-index: 5;
-      gap: 60px;
+      width: 420px;
     }
 
-    /* Left Specs Area */
-    .content-area {
-      max-width: 580px;
+    .search-box input {
+      width: 100%;
+      padding: 10px 18px 10px 42px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 25px;
+      color: #fff;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border 0.3s ease;
     }
 
-    .badge {
-      display: inline-flex;
+    .search-box input:focus {
+      border-color: var(--accent);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--accent), #7928ca);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    /* Body View Container */
+    .content-container {
+      padding: 30px;
+    }
+
+    /* Main Featured Video Player */
+    .player-section {
+      margin-bottom: 35px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-top: 42%;
+      background: #000;
+    }
+
+    .video-wrapper video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-details {
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #151b29;
+    }
+
+    .video-info h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .video-info p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .btn-action {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
       align-items: center;
       gap: 8px;
-      background: rgba(255, 255, 255, 0.04);
+      transition: opacity 0.2s;
+    }
+
+    .btn-action:hover {
+      opacity: 0.9;
+    }
+
+    /* Filter Chips */
+    .categories {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .chip {
+      background: var(--card-bg);
       border: 1px solid var(--border-subtle);
-      padding: 6px 16px;
+      color: var(--text-muted);
+      padding: 8px 18px;
       border-radius: 20px;
-      font-size: 0.75rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 20px;
-    }
-
-    .badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 8px var(--accent);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
-    }
-
-    .product-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 3.4rem;
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 20px;
-      letter-spacing: -1px;
-    }
-
-    .product-desc {
-      font-size: 1rem;
-      line-height: 1.7;
-      color: var(--text-dim);
-      margin-bottom: 35px;
-      min-height: 55px;
-    }
-
-    /* Audio Equalizer HUD Widget */
-    .visualizer-box {
-      background: var(--card-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 20px 24px;
-      backdrop-filter: blur(16px);
-      margin-bottom: 35px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .vis-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .vis-title {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text-dim);
-    }
-
-    .vis-status {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .equalizer {
-      display: flex;
-      align-items: flex-end;
-      gap: 4px;
-      height: 28px;
-    }
-
-    .eq-bar {
-      width: 4px;
-      background: var(--accent);
-      border-radius: 2px;
-      box-shadow: 0 0 8px var(--accent);
-      animation: eqBounce 1.2s ease-in-out infinite alternate;
-    }
-
-    .eq-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; }
-    .eq-bar:nth-child(2) { height: 80%; animation-delay: 0.3s; }
-    .eq-bar:nth-child(3) { height: 100%; animation-delay: 0.2s; }
-    .eq-bar:nth-child(4) { height: 60%; animation-delay: 0.5s; }
-    .eq-bar:nth-child(5) { height: 90%; animation-delay: 0.4s; }
-    .eq-bar:nth-child(6) { height: 50%; animation-delay: 0.6s; }
-
-    @keyframes eqBounce {
-      0% { height: 20%; }
-      100% { height: 100%; }
-    }
-
-    /* Interactive Color Variant Pickers */
-    .variant-selector {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .variant-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 20px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
       cursor: pointer;
-      color: #fff;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+      transition: all 0.2s ease;
     }
 
-    .variant-btn:hover {
-      border-color: rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.06);
+    .chip.active, .chip:hover {
+      background: #fff;
+      color: #000;
     }
 
-    .variant-btn.active {
-      border-color: var(--accent);
-      background: rgba(var(--accent-rgb), 0.1);
-      box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.2);
-    }
-
-    .color-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      box-shadow: 0 0 10px currentColor;
-    }
-
-    /* Right Showcase: 3D Holographic Stage */
-    .stage-wrapper {
-      perspective: 1200px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .holo-card {
-      width: 440px;
-      height: 560px;
-      background: var(--card-surface);
-      border: 1px solid var(--border-glow);
-      border-radius: 28px;
-      backdrop-filter: blur(24px);
-      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.02);
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.15s ease-out, border-color 0.5s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Futuristic HUD Reticle Elements */
-    .hud-reticle {
-      position: absolute;
-      width: 320px;
-      height: 320px;
-      border: 1px dashed rgba(255, 255, 255, 0.15);
-      border-radius: 50%;
-      pointer-events: none;
-      animation: rotateHud 40s linear infinite;
-    }
-
-    .hud-reticle-inner {
-      position: absolute;
-      width: 260px;
-      height: 260px;
-      border: 1px solid var(--accent);
-      border-radius: 50%;
-      opacity: 0.2;
-      pointer-events: none;
-    }
-
-    @keyframes rotateHud {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* Floating Center Visual Asset */
-    .hero-asset {
-      font-size: 8.5rem;
-      transform: translateZ(80px);
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.9));
-      user-select: none;
-    }
-
-    /* Telemetry Diagnostics Overlay */
-    .holo-card .telemetry-tag {
-      position: absolute;
-      top: 24px;
-      left: 24px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 2px;
-      color: var(--text-dim);
-      transform: translateZ(30px);
-    }
-
-    .telemetry-grid {
-      position: absolute;
-      bottom: 24px;
-      width: calc(100% - 48px);
+    /* Video Feed Grid */
+    .video-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      transform: translateZ(40px);
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
     }
 
-    .tele-cell {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 10px 14px;
-      border-radius: 10px;
+    .video-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
-    .tele-label {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-dim);
+    .video-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .card-thumb {
+      position: relative;
+      width: 100%;
+      height: 150px;
+      background: #252e42;
+      overflow: hidden;
+    }
+
+    .card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .badge-duration {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 3px 6px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .card-info {
+      padding: 14px;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-channel {
+      font-size: 0.8rem;
+      color: var(--text-muted);
       margin-bottom: 4px;
     }
 
-    .tele-val {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #fff;
+    .card-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
     }
 
-    /* Responsive Queries */
-    @media (max-width: 1024px) {
-      .showcase {
-        grid-template-columns: 1fr;
-        padding-top: 40px;
-        gap: 50px;
-      }
-      .stage-wrapper { order: -1; }
-      .holo-card { width: 100%; max-width: 400px; height: 500px; }
-      .product-title { font-size: 2.8rem; }
+    @media (max-width: 850px) {
+      aside { display: none; }
+      .search-box { width: 220px; }
+      .video-wrapper { padding-top: 56.25%; }
     }
   </style>
 </head>
 <body>
 
-  <canvas id="canvas-bg"></canvas>
-  <div class="ambient-glow" id="ambientGlow"></div>
-
-  <header>
-    <div class="brand">
-      <div class="brand-pill"></div>
-      AURA<span style="color: var(--accent);">.X</span>
+  <aside>
+    <div>
+      <div class="brand">▶ STREAM<span>VIBE</span></div>
+      <ul class="nav-list">
+        <li class="nav-item active">🏠 Home</li>
+        <li class="nav-item">🔥 Trending</li>
+        <li class="nav-item">🎮 Gaming</li>
+        <li class="nav-item">🎧 Music</li>
+        <li class="nav-item">📚 Library</li>
+      </ul>
     </div>
-    <ul class="nav-links">
-      <li><a href="#" data-glitch="Hardware">Hardware</a></li>
-      <li><a href="#" data-glitch="Architecture">Architecture</a></li>
-      <li><a href="#" data-glitch="Neural Driver">Neural Driver</a></li>
-    </ul>
-    <button class="action-btn">Pre-Order Spec</button>
-  </header>
-
-  <main class="showcase">
-    <div class="content-area">
-      <div class="badge">
-        <span class="badge-dot"></span>
-        <span id="batchTag">Neural Spatial Array // Gen-4</span>
-      </div>
-
-      <h1 class="product-title" id="titleDisplay">AURA // SPECTRE</h1>
-      <p class="product-desc" id="descDisplay">
-        Beryllium dynamic transducers coupled with sub-millisecond neural audio reconstruction. Immersive spatial resolution calibrated for sonic purists.
-      </p>
-
-      <div class="visualizer-box">
-        <div class="vis-info">
-          <span class="vis-title">Acoustic Calibration</span>
-          <span class="vis-status" id="profileDisplay">Dolby Atmos // 96kHz Lossless</span>
-        </div>
-        <div class="equalizer">
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-          <div class="eq-bar"></div>
-        </div>
-      </div>
-
-      <div class="variant-selector">
-        <button class="variant-btn active" onclick="setVariant(0)">
-          <span class="color-dot" style="background: #00f0ff; color: #00f0ff;"></span>
-          Cyan Matrix
-        </button>
-        <button class="variant-btn" onclick="setVariant(1)">
-          <span class="color-dot" style="background: #ff0055; color: #ff0055;"></span>
-          Crimson Core
-        </button>
-        <button class="variant-btn" onclick="setVariant(2)">
-          <span class="color-dot" style="background: #a855f7; color: #a855f7;"></span>
-          Violet Pulse
-        </button>
-      </div>
+    <div style="font-size: 0.75rem; color: var(--text-muted); padding-left: 10px;">
+      © 2026 StreamVibe Inc.
     </div>
+  </aside>
 
-    <div class="stage-wrapper" id="stageWrap">
-      <div class="holo-card" id="holoCard">
-        <div class="telemetry-tag">TELEMETRY // LIVE</div>
-        <div class="hud-reticle"></div>
-        <div class="hud-reticle-inner"></div>
-
-        <div class="hero-asset" id="assetDisplay">🎧</div>
-
-        <div class="telemetry-grid">
-          <div class="tele-cell">
-            <div class="tele-label">Latency Factor</div>
-            <div class="tele-val" id="latencyVal">0.42 ms</div>
-          </div>
-          <div class="tele-cell">
-            <div class="tele-label">Dynamic Headroom</div>
-            <div class="tele-val" id="headroomVal">+18 dBFS</div>
-          </div>
-        </div>
+  <main>
+    <header>
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search videos, creators..." onkeyup="filterVideos()" />
       </div>
+      <div class="user-profile">
+        <div class="avatar">M</div>
+      </div>
+    </header>
+
+    <div class="content-container">
+      <section class="player-section">
+        <div class="video-wrapper">
+          <video id="mainVideo" controls autoplay muted poster="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1200&auto=format&fit=crop&q=80">
+            <source id="videoSource" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="video-details">
+          <div class="video-info">
+            <h2 id="currentTitle">Cinematic Open Source Reel (4K Ultra HD)</h2>
+            <p id="currentMeta">Apex Studio • 1.4M views • 2 hours ago</p>
+          </div>
+          <button class="btn-action">♥ Subscribe</button>
+        </div>
+      </section>
+
+      <div class="categories">
+        <div class="chip active">All Videos</div>
+        <div class="chip">Animation</div>
+        <div class="chip">Tech & AI</div>
+        <div class="chip">Gaming</div>
+        <div class="chip">Music</div>
+        <div class="chip">Web Dev</div>
+      </div>
+
+      <div class="video-grid" id="videoGrid">
+        </div>
     </div>
   </main>
 
   <script>
-    /* Data Models for Dynamic Variants */
-    const models = [
+    const videoList = [
       {
-        title: "AURA // SPECTRE",
-        tag: "Neural Spatial Array // Gen-4",
-        desc: "Beryllium dynamic transducers coupled with sub-millisecond neural audio reconstruction. Immersive spatial resolution calibrated for sonic purists.",
-        profile: "Dolby Atmos // 96kHz Lossless",
-        icon: "🎧",
-        accent: "#00f0ff",
-        accentRgb: "0, 240, 255",
-        latency: "0.42 ms",
-        headroom: "+18 dBFS"
+        id: 1,
+        title: "Big Buck Bunny Animated Short Movie",
+        channel: "Blender Foundation",
+        views: "2.4M views",
+        time: "3 days ago",
+        duration: "09:56",
+        src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        thumb: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=80"
       },
       {
-        title: "VORTEX // HYPERION",
-        tag: "Planar Magnetic Array // Overclocked",
-        desc: "Engineered with ultra-thin nanometer diaphragms for razor-sharp transients and visceral bass extension. Tuned specifically for cinematic workloads.",
-        profile: "Spatial 3D // 192kHz Master Audio",
-        icon: "🎙️",
-        accent: "#ff0055",
-        accentRgb: "255, 0, 85",
-        latency: "0.18 ms",
-        headroom: "+24 dBFS"
+        id: 2,
+        title: "Elephant Dream Sci-Fi Project",
+        channel: "Open Studio",
+        views: "850K views",
+        time: "1 week ago",
+        duration: "10:53",
+        src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        thumb: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80"
       },
       {
-        title: "SYNAPSE // NEBULA",
-        tag: "Bio-Synthetic Sensor // Adaptive",
-        desc: "Adaptive active acoustic filtering driven by biometric telemetry. Balances frequency response in real time to match ear canal geometry.",
-        profile: "AI Adaptive // Zero-Loss Direct",
-        icon: "🔮",
-        accent: "#a855f7",
-        accentRgb: "168, 85, 247",
-        latency: "0.31 ms",
-        headroom: "+15 dBFS"
+        id: 3,
+        title: "For Bigger Blazes - Nature Action 4K",
+        channel: "Wild Cinematic",
+        views: "430K views",
+        time: "5 hours ago",
+        duration: "00:15",
+        src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        thumb: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop&q=80"
+      },
+      {
+        id: 4,
+        title: "Chromecast Visual Escape Experience",
+        channel: "Tech Hub Originals",
+        views: "1.1M views",
+        time: "2 weeks ago",
+        duration: "00:15",
+        src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        thumb: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&auto=format&fit=crop&q=80"
       }
     ];
 
-    /* Text Decoding Glitch Animation */
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-    function glitchText(element, finalText) {
-      let iteration = 0;
-      clearInterval(element.interval);
-      
-      element.interval = setInterval(() => {
-        element.innerText = finalText
-          .split("")
-          .map((letter, index) => {
-            if (index < iteration) return finalText[index];
-            return letters[Math.floor(Math.random() * letters.length)];
-          })
-          .join("");
+    const grid = document.getElementById("videoGrid");
+    const videoPlayer = document.getElementById("mainVideo");
+    const videoSource = document.getElementById("videoSource");
+    const currentTitle = document.getElementById("currentTitle");
+    const currentMeta = document.getElementById("currentMeta");
 
-        if (iteration >= finalText.length) {
-          clearInterval(element.interval);
-        }
-        iteration += 1 / 2;
-      }, 25);
+    function renderCards(list) {
+      grid.innerHTML = list.map((item) => `
+        <div class="video-card" onclick="playVideo('${item.src}', '${item.title}', '${item.channel}', '${item.views}', '${item.time}')">
+          <div class="card-thumb">
+            <img src="${item.thumb}" alt="${item.title}">
+            <div class="badge-duration">${item.duration}</div>
+          </div>
+          <div class="card-info">
+            <div class="card-title">${item.title}</div>
+            <div class="card-channel">${item.channel}</div>
+            <div class="card-meta">${item.views} • ${item.time}</div>
+          </div>
+        </div>
+      `).join('');
     }
 
-    /* Switch Model Handler */
-    function setVariant(index) {
-      const active = models[index];
-
-      // Update Root Colors
-      document.documentElement.style.setProperty('--accent', active.accent);
-      document.documentElement.style.setProperty('--accent-rgb', active.accentRgb);
-
-      // Update Variant Buttons
-      document.querySelectorAll('.variant-btn').forEach((btn, i) => {
-        btn.classList.toggle('active', i === index);
-      });
-
-      // Update Content with Glitch Animation
-      glitchText(document.getElementById('titleDisplay'), active.title);
-      document.getElementById('batchTag').innerText = active.tag;
-      document.getElementById('descDisplay').innerText = active.desc;
-      document.getElementById('profileDisplay').innerText = active.profile;
-      document.getElementById('assetDisplay').innerText = active.icon;
-      document.getElementById('latencyVal').innerText = active.latency;
-      document.getElementById('headroomVal').innerText = active.headroom;
+    function playVideo(src, title, channel, views, time) {
+      videoPlayer.src = src;
+      videoPlayer.play();
+      currentTitle.innerText = title;
+      currentMeta.innerText = `${channel} • ${views} • ${time}`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /* 3D Tilt Logic on Mouse Move */
-    const card = document.getElementById("holoCard");
-    const stage = document.getElementById("stageWrap");
-
-    window.addEventListener("mousemove", (e) => {
-      const rect = stage.getBoundingClientRect();
-      const x = e.clientX - (rect.left + rect.width / 2);
-      const y = e.clientY - (rect.top + rect.height / 2);
-
-      const rotateX = (-y / 20).toFixed(2);
-      const rotateY = (x / 20).toFixed(2);
-
-      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-
-    stage.addEventListener("mouseleave", () => {
-      card.style.transform = `rotateX(0deg) rotateY(0deg)`;
-    });
-
-    /* Interactive Particle System */
-    const canvas = document.getElementById("canvas-bg");
-    const ctx = canvas.getContext("2d");
-    let particles = [];
-    let mouse = { x: null, y: null };
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    window.addEventListener("mousemove", (e) => {
-      mouse.x = e.x;
-      mouse.y = e.y;
-    });
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedX = Math.random() * 0.8 - 0.4;
-        this.speedY = Math.random() * 0.8 - 0.4;
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x > canvas.width) this.x = 0;
-        else if (this.x < 0) this.x = canvas.width;
-        if (this.y > canvas.height) this.y = 0;
-        else if (this.y < 0) this.y = canvas.height;
-      }
-      draw() {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
+    function filterVideos() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = videoList.filter(v => 
+        v.title.toLowerCase().includes(query) || v.channel.toLowerCase().includes(query)
+      );
+      renderCards(filtered);
     }
 
-    function initParticles() {
-      particles = [];
-      const particleCount = Math.floor(window.innerWidth / 16);
-      for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
-      }
-    }
-    initParticles();
-
-    function renderParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-
-        for (let j = i; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 110) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.08 - dist / 1400})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-      requestAnimationFrame(renderParticles);
-    }
-    renderParticles();
+    // Initial render
+    renderCards(videoList);
   </script>
 </body>
-</html> 
+</html>
