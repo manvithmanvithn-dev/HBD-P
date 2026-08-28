@@ -3,62 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CYBER-X // Next-Gen Showcase</title>
+  <title>AURA // Neural Acoustic Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --primary-color: #00f0ff;
-      --secondary-color: #ff0055;
-      --card-bg: rgba(18, 22, 36, 0.65);
-      --border-glow: rgba(0, 240, 255, 0.4);
+      --accent: #00f0ff;
+      --accent-rgb: 0, 240, 255;
+      --bg-dark: #03060c;
+      --card-surface: rgba(10, 16, 28, 0.7);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(0, 240, 255, 0.35);
+      --text-main: #f8fafc;
+      --text-dim: #94a3b8;
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', 'SF Pro Display', -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
-      background-color: #05070f;
-      color: #fff;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
       min-height: 100vh;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
-      perspective: 1000px;
+      position: relative;
     }
 
-    /* Interactive Background Grid */
-    .cyber-grid {
+    /* Ambient Canvas Particle Layer */
+    #canvas-bg {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
       pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Glowing ambient cursor tracker */
-    .cursor-glow {
-      position: fixed;
-      width: 450px;
-      height: 450px;
-      background: radial-gradient(circle, var(--primary-color) 0%, transparent 65%);
-      opacity: 0.15;
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      transition: width 0.3s, height 0.3s, opacity 0.3s;
       z-index: 1;
     }
 
-    /* Navbar */
+    /* Radial Ambient Vignette */
+    .ambient-glow {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(var(--accent-rgb), 0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      transition: background 0.8s ease;
+    }
+
+    /* Header & Navigation */
     header {
       position: relative;
       z-index: 10;
@@ -69,381 +74,116 @@
     }
 
     .brand {
-      font-size: 1.2rem;
-      font-weight: 800;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.4rem;
       letter-spacing: 4px;
-      text-transform: uppercase;
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .brand span {
-      color: var(--primary-color);
+    .brand-pill {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
     }
 
-    .nav-items {
+    .nav-links {
       display: flex;
-      gap: 30px;
+      gap: 36px;
       list-style: none;
     }
 
-    .nav-items a {
-      color: rgba(255, 255, 255, 0.6);
+    .nav-links a {
+      color: var(--text-dim);
       text-decoration: none;
       font-size: 0.85rem;
-      letter-spacing: 2px;
       text-transform: uppercase;
-      transition: 0.3s ease;
-    }
-
-    .nav-items a:hover {
-      color: var(--primary-color);
-      text-shadow: 0 0 10px var(--primary-color);
-    }
-
-    /* Main Showcase Stage */
-    .stage {
-      flex: 1;
+      letter-spacing: 2px;
+      font-weight: 500;
+      transition: all 0.3s ease;
       position: relative;
-      z-index: 5;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      padding: 0 8% 40px;
-      gap: 40px;
     }
 
-    /* Left Side Telemetry Details */
-    .details {
-      max-width: 500px;
-    }
-
-    .sys-tag {
-      font-size: 0.75rem;
-      letter-spacing: 3px;
-      color: var(--primary-color);
-      text-transform: uppercase;
-      margin-bottom: 15px;
-      display: inline-block;
-      border-left: 2px solid var(--primary-color);
-      padding-left: 10px;
-    }
-
-    .product-title {
-      font-size: 3.5rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      line-height: 1.1;
-      margin-bottom: 20px;
-    }
-
-    .product-desc {
-      font-size: 0.95rem;
-      color: rgba(255, 255, 255, 0.65);
-      line-height: 1.7;
-      margin-bottom: 30px;
-    }
-
-    /* Hologram Diagnostics Bars */
-    .telemetry {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-bottom: 40px;
-    }
-
-    .metric-row {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .metric-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 80%;
-      background: var(--primary-color);
-      box-shadow: 0 0 8px var(--primary-color);
-      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s ease;
-    }
-
-    /* Custom Mode Selectors */
-    .selector-strip {
-      display: flex;
-      gap: 15px;
-    }
-
-    .select-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+    .nav-links a:hover {
       color: #fff;
-      padding: 12px 24px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.8rem;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .action-btn {
+      background: rgba(var(--accent-rgb), 0.08);
+      border: 1px solid var(--border-glow);
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 0.85rem;
       letter-spacing: 1.5px;
+      font-weight: 600;
       text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
       transition: all 0.3s ease;
     }
 
-    .select-btn:hover, .select-btn.active {
-      background: rgba(0, 240, 255, 0.1);
-      border-color: var(--primary-color);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-      color: #fff;
+    .action-btn:hover {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.5);
+      transform: translateY(-2px);
     }
 
-    /* 3D Holographic Card Structure */
-    .card-wrap {
-      perspective: 1200px;
-      display: flex;
-      justify-content: center;
+    /* Main Grid Layout */
+    .showcase {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
       align-items: center;
+      padding: 0 8% 50px;
+      position: relative;
+      z-index: 5;
+      gap: 60px;
     }
 
-    .holo-card {
-      width: 380px;
-      height: 520px;
-      background: var(--card-bg);
-      border: 1px solid var(--border-glow);
-      border-radius: 20px;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.03);
-      position: relative;
-      display: flex;
-      flex-direction: column;
+    /* Left Specs Area */
+    .content-area {
+      max-width: 580px;
+    }
+
+    .badge {
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      transform-style: preserve-3d;
-      transition: transform 0.15s ease-out, border-color 0.5s ease;
-    }
-
-    /* Outer Orbit Wireframe */
-    .hud-circle {
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      border: 1px dashed rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translateZ(20px);
-      animation: spin 30s linear infinite;
-    }
-
-    .hud-circle-inner {
-      position: absolute;
-      width: 240px;
-      height: 240px;
-      border: 1px solid var(--primary-color);
-      opacity: 0.3;
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translateZ(30px);
-    }
-
-    @keyframes spin {
-      100% { transform: translateZ(20px) rotate(360deg); }
-    }
-
-    /* Floating Center Visual Icon */
-    .product-core {
-      position: relative;
-      font-size: 8rem;
-      transform: translateZ(70px);
-      filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.7));
-      transition: transform 0.4s ease;
-    }
-
-    .floating-tag {
-      position: absolute;
-      top: 30px;
-      right: 30px;
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 5px 12px;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 16px;
       border-radius: 20px;
-      font-size: 0.7rem;
-      letter-spacing: 1px;
-      transform: translateZ(40px);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
     }
 
-    .status-pulse {
-      display: inline-block;
+    .badge-dot {
       width: 6px;
       height: 6px;
-      border-radius: 50%;
-      background: var(--primary-color);
-      margin-right: 5px;
-      box-shadow: 0 0 8px var(--primary-color);
-    }
-
-    @media (max-width: 900px) {
-      .stage { grid-template-columns: 1fr; margin-top: 40px; }
-      .card-wrap { order: -1; }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="cyber-grid"></div>
-  <div class="cursor-glow" id="cursorGlow"></div>
-
-  <header>
-    <div class="brand">⚡ CYBER<span>SPEC</span></div>
-    <ul class="nav-items">
-      <li><a href="#">Architecture</a></li>
-      <li><a href="#">Telemetry</a></li>
-      <li><a href="#">Network</a></li>
-    </ul>
-  </header>
-
-  <main class="stage">
-    <div class="details">
-      <div class="sys-tag" id="sysTag">UNIT // SPEC-01 READY</div>
-      <h1 class="product-title" id="productTitle">QUANTUM BLADE</h1>
-      <p class="product-desc" id="productDesc">
-        Engineered with carbon-lattice framework and zero-latency subatomic drivers. Delivers absolute visual clarity and unmatched output fidelity.
-      </p>
-
-      <div class="telemetry">
-        <div class="metric-row">
-          <div class="metric-labels">
-            <span>Dynamic Output Rate</span>
-            <span id="rateLabel">94.2%</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="metricRate" style="width: 94%;"></div>
-          </div>
-        </div>
-        <div class="metric-row">
-          <div class="metric-labels">
-            <span>Thermal Efficiency</span>
-            <span id="thermalLabel">82.5%</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="metricThermal" style="width: 82%;"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="selector-strip">
-        <button class="select-btn active" onclick="switchProduct(0)">Mode Cyan</button>
-        <button class="select-btn" onclick="switchProduct(1)">Mode Crimson</button>
-        <button class="select-btn" onclick="switchProduct(2)">Mode Emerald</button>
-      </div>
-    </div>
-
-    <div class="card-wrap" id="cardArea">
-      <div class="holo-card" id="holoCard">
-        <div class="floating-tag">
-          <span class="status-pulse"></span> ONLINE
-        </div>
-        <div class="hud-circle"></div>
-        <div class="hud-circle-inner"></div>
-        <div class="product-core" id="productCore">💠</div>
-      </div>
-    </div>
-  </main>
-
-  <script>
-    const data = [
-      {
-        title: "QUANTUM BLADE",
-        desc: "Engineered with carbon-lattice framework and zero-latency subatomic drivers. Delivers absolute visual clarity and unmatched output fidelity.",
-        tag: "UNIT // SPEC-01 READY",
-        symbol: "💠",
-        color: "#00f0ff",
-        rate: "94%",
-        thermal: "82%"
-      },
-      {
-        title: "VORTEX PULSE",
-        desc: "High-torque hyper-kinetic power delivery unit. Tuned for intense operational workloads with integrated liquid-nitrogen routing.",
-        tag: "UNIT // SPEC-02 BOOST",
-        symbol: "🩸",
-        color: "#ff0055",
-        rate: "99%",
-        thermal: "68%"
-      },
-      {
-        title: "BIO-NEURAL CORE",
-        desc: "Synthetic neural processor equipped with self-optimizing synaptic weights. Ultra-efficient environmental resilience profile.",
-        tag: "UNIT // SPEC-03 STABLE",
-        symbol: "🧬",
-        color: "#00ff88",
-        rate: "88%",
-        thermal: "96%"
-      }
-    ];
-
-    // Smooth Card 3D Tilt Logic
-    const card = document.getElementById("holoCard");
-    const cardArea = document.getElementById("cardArea");
-    const glow = document.getElementById("cursorGlow");
-
-    window.addEventListener("mousemove", (e) => {
-      // Glow movement
-      glow.style.left = `${e.clientX}px`;
-      glow.style.top = `${e.clientY}px`;
-
-      // 3D Tilt Calculations
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-
-      const rotateX = (-y / 15).toFixed(2);
-      const rotateY = (x / 15).toFixed(2);
-
-      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-
-    cardArea.addEventListener("mouseleave", () => {
-      card.style.transform = `rotateX(0deg) rotateY(0deg)`;
-    });
-
-    // Content Switcher
-    function switchProduct(index) {
-      const selected = data[index];
-
-      // Update Root CSS Glow Variable
-      document.documentElement.style.setProperty('--primary-color', selected.color);
-      document.documentElement.style.setProperty('--border-glow', selected.color + '66');
-
-      // Update Active Buttons
-      const btns = document.querySelectorAll('.select-btn');
-      btns.forEach((b, i) => b.classList.toggle('active', i === index));
-
-      // Update UI Text & Specs
-      document.getElementById('sysTag').innerText = selected.tag;
-      document.getElementById('productTitle').innerText = selected.title;
-      document.getElementById('productDesc').innerText = selected.desc;
-      document.getElementById('productCore').innerText = selected.symbol;
-
-      document.getElementById('rateLabel').innerText = selected.rate;
-      document.getElementById('metricRate').style.width = selected.rate;
-
-      document.getElementById('thermalLabel').innerText = selected.thermal;
-      document.getElementById('metricThermal').style.width = selected.thermal;
-    }
-  </script>
-</body>
-</html>
+      border-radius
