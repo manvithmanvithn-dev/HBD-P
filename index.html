@@ -1,151 +1,157 @@
-<!DOCTYPE html>
+import os, zipfile, re, textwrap
+
+base = "/mnt/data/pc_gym_starter"
+os.makedirs(base, exist_ok=True)
+
+# Update the existing prototype with scroll-reveal animations, footer links/credit, and privacy pages.
+index_path = os.path.join(base, "index.html")
+with open(index_path, "r", encoding="utf-8") as f:
+    html = f.read()
+
+# Add scroll animation class to key sections and elements.
+html = html.replace('<section class="hero section" id="home">', '<section class="hero section reveal" id="home">')
+html = html.replace('<section class="section programs" id="programs">', '<section class="section programs reveal" id="programs">')
+html = html.replace('<article class="program-card">', '<article class="program-card reveal">')
+html = html.replace('<article class="program-card featured">', '<article class="program-card featured reveal">')
+html = html.replace('<section class="section plans" id="plans">', '<section class="section plans reveal" id="plans">')
+html = html.replace('<article class="plan-card">', '<article class="plan-card reveal">')
+html = html.replace('<article class="plan-card plan-popular">', '<article class="plan-card plan-popular reveal">')
+html = html.replace('<section class="contact-section" id="contact">', '<section class="contact-section reveal" id="contact">')
+
+old_footer = '''<footer class="footer"><a class="brand footer-brand" href="#home"><span class="brand-mark">PC</span><span>GYM<span class="brand-dot">.</span><small>FITNESS & PERFORMANCE</small></span></a><p>Built on consistency. Driven by you.</p><div><a href="#home">Back to top ↑</a><a href="admin.html">Admin demo ↗</a></div><small>© <span id="year"></span> PC GYM. Replace demo details before launch.</small></footer>'''
+new_footer = '''<footer class="footer"><a class="brand footer-brand" href="#home"><span class="brand-mark">PC</span><span>GYM<span class="brand-dot">.</span><small>FITNESS & PERFORMANCE</small></span></a><p>Built on consistency. Driven by you.</p><div class="footer-links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="#contact">Contact Us</a><a href="admin.html">Admin demo ↗</a><a href="#home">Back to top ↑</a></div><small>© <span id="year"></span> PC GYM. All rights reserved.</small><small class="creator-credit">Website crafted by <strong>PC Manu</strong> ♥</small></footer>'''
+if old_footer in html:
+    html = html.replace(old_footer, new_footer)
+else:
+    print("Footer pattern not found; footer may already be updated.")
+
+with open(index_path, "w", encoding="utf-8") as f:
+    f.write(html)
+
+# Append animation styles and footer styles, with reduced-motion support.
+css_path = os.path.join(base, "styles.css")
+with open(css_path, "r", encoding="utf-8") as f:
+    css = f.read()
+css += r'''
+
+/* Scroll-triggered reveal animations */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--reveal-delay,0ms)}
+.reveal.is-visible{opacity:1;transform:translateY(0)}
+.program-card.reveal:nth-child(2),.plan-card.reveal:nth-child(2){--reveal-delay:100ms}
+.program-card.reveal:nth-child(3),.plan-card.reveal:nth-child(3){--reveal-delay:180ms}
+.hero.reveal{transform:translateY(18px)}
+.footer-links{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+.creator-credit{font-size:11px!important;color:#6f7f95!important}
+.creator-credit strong{color:var(--blue)}
+@media(prefers-reduced-motion:reduce){.reveal,.reveal.is-visible{opacity:1;transform:none;transition:none}}
+'''
+with open(css_path, "w", encoding="utf-8") as f:
+    f.write(css)
+
+# Add IntersectionObserver-based scroll animations with a safe fallback.
+js_path = os.path.join(base, "app.js")
+with open(js_path, "r", encoding="utf-8") as f:
+    js = f.read()
+js += r'''
+
+// Scroll reveal: progressively animate sections/cards as they enter the viewport.
+// If IntersectionObserver is unavailable, reveal everything rather than hiding content.
+(() => {
+  const revealItems = document.querySelectorAll(".reveal");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !("IntersectionObserver" in window)) {
+    revealItems.forEach(item => item.classList.add("is-visible"));
+    return;
+  }
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+  revealItems.forEach(item => observer.observe(item));
+})();
+'''
+with open(js_path, "w", encoding="utf-8") as f:
+    f.write(js)
+
+privacy_html = r'''<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My First Blog Post</title>
-  
-  <style>
-    /* 1. Page Background & Font */
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.7;
-      background-color: #f8fafc;
-      color: #334155;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* 2. Navigation Bar */
-    header {
-      background-color: #ffffff;
-      padding: 16px 24px;
-      border-bottom: 1px solid #e2e8f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo {
-      font-weight: 700;
-      font-size: 20px;
-      color: #2563eb;
-    }
-
-    /* 3. Main Container */
-    .container {
-      max-width: 720px;
-      margin: 40px auto;
-      background: #ffffff;
-      padding: 32px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    /* 4. Article Header */
-    .tag {
-      display: inline-block;
-      background-color: #e0e7ff;
-      color: #4338ca;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-      text-transform: uppercase;
-    }
-    h1 {
-      font-size: 32px;
-      color: #0f172a;
-      margin: 12px 0 8px 0;
-    }
-    .meta {
-      font-size: 14px;
-      color: #64748b;
-      margin-bottom: 24px;
-    }
-
-    /* 5. Article Content */
-    p {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-    .highlight-box {
-      background-color: #f1f5f9;
-      border-left: 4px solid #2563eb;
-      padding: 16px;
-      margin: 24px 0;
-      border-radius: 0 8px 8px 0;
-    }
-
-    /* 6. Interactive Like Section */
-    .interaction-bar {
-      margin-top: 32px;
-      padding-top: 20px;
-      border-top: 1px solid #e2e8f0;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .like-btn {
-      background-color: #ef4444;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      font-size: 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: transform 0.1s, background-color 0.2s;
-    }
-    .like-btn:hover {
-      background-color: #dc2626;
-    }
-    .like-btn:active {
-      transform: scale(0.95);
-    }
-  </style>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PC GYM privacy policy — learn how enquiries and membership information are handled.">
+  <title>Privacy Policy | PC GYM</title><link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<header class="site-header">
+  <a class="brand" href="index.html"><span class="brand-mark">PC</span><span>GYM<span class="brand-dot">.</span><small>FITNESS & PERFORMANCE</small></span></a>
+  <nav><a href="index.html#home">Home</a><a href="index.html#programs">Programs</a><a href="index.html#plans">Membership</a><a href="index.html#contact">Contact</a></nav>
+</header>
+<main class="policy-page section">
+  <p class="eyebrow">PC GYM · YOUR INFORMATION</p><h1>Privacy <span>Policy.</span></h1>
+  <p class="policy-updated">Starter template · Review and update before publishing</p>
+  <div class="policy-notice"><strong>Important:</strong> This is a draft template, not legal advice. Replace placeholders and confirm the policy matches the actual services, local law, and data practices before the site goes live.</div>
+  <section><h2>1. Information we may collect</h2><p>Depending on the features enabled, PC GYM may collect information you submit, such as your name, phone number, email address, membership selection, enquiry message, and information needed to manage your membership or attendance.</p></section>
+  <section><h2>2. How we use information</h2><p>Information may be used to respond to enquiries, process membership requests, communicate about gym services, maintain membership and attendance records, and improve our services.</p></section>
+  <section><h2>3. Storage and security</h2><p>We should use reasonable technical and organisational safeguards, restrict staff access, and retain information only as needed. The current starter prototype stores demo registrations in your browser and is not suitable for real sensitive member data. Do not enter real customer information until secure server-side storage and access controls are implemented.</p></section>
+  <section><h2>4. Sharing</h2><p>PC GYM should not sell personal information. If third-party services are added (for example, hosting, analytics, messaging, or payment providers), update this policy to explain what they receive and why.</p></section>
+  <section><h2>5. Cookies and local storage</h2><p>The current prototype uses browser local storage for demo membership records. Future versions may use essential cookies or other storage for authentication and site operation. Explain any analytics or optional tracking before enabling it.</p></section>
+  <section><h2>6. Your choices and requests</h2><p>Members should be able to ask to access or correct their information, or request deletion where applicable. Add a real contact email and process for handling these requests before launch.</p></section>
+  <section><h2>7. Children</h2><p>If the gym accepts minors, establish appropriate consent, safety, and data-handling procedures and update this policy accordingly.</p></section>
+  <section><h2>8. Changes to this policy</h2><p>We may update this policy when the website or services change. Publish the effective date and communicate material changes where required.</p></section>
+  <section><h2>9. Contact</h2><p>Privacy questions: <strong>[Add your official PC GYM contact email and business address]</strong>.</p></section>
+  <a class="btn" href="index.html">← Back to PC GYM</a>
+</main>
+<footer class="footer"><a class="brand footer-brand" href="index.html"><span class="brand-mark">PC</span><span>GYM<span class="brand-dot">.</span><small>FITNESS & PERFORMANCE</small></span></a><div class="footer-links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="index.html#contact">Contact Us</a></div><small>© <span id="year"></span> PC GYM. All rights reserved.</small><small class="creator-credit">Website crafted by <strong>PC Manu</strong> ♥</small></footer>
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body></html>'''
 
-  <header>
-    <div class="logo">MyDevBlog</div>
-    <div><span>Home</span> | <span>Articles</span></div>
-  </header>
+terms_html = r'''<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Terms &amp; Conditions | PC GYM</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">PC</span><span>GYM<span class="brand-dot">.</span><small>FITNESS & PERFORMANCE</small></span></a><nav><a href="index.html#home">Home</a><a href="index.html#plans">Membership</a><a href="index.html#contact">Contact</a></nav></header>
+<main class="policy-page section">
+<p class="eyebrow">PC GYM · WEBSITE TERMS</p><h1>Terms &amp; <span>Conditions.</span></h1>
+<div class="policy-notice"><strong>Draft template:</strong> Review and adapt these terms to your actual membership rules and local law before publishing.</div>
+<section><h2>1. Website information</h2><p>Website content, example plans, and example prices are illustrative until confirmed by PC GYM. Contact the gym for current membership details and availability.</p></section>
+<section><h2>2. Enquiries and registrations</h2><p>Submitting a form is a request for contact or registration; it does not confirm membership, payment, or access unless PC GYM confirms it through its official process.</p></section>
+<section><h2>3. Fitness and health</h2><p>Exercise involves physical effort and may carry risks. Members should choose activities appropriate to their abilities and seek qualified medical advice when needed. Follow gym rules and staff instructions.</p></section>
+<section><h2>4. Acceptable use</h2><p>Do not misuse the website, attempt unauthorised access, submit false information, or interfere with its operation.</p></section>
+<section><h2>5. Changes and contact</h2><p>Website features and prices may change. Add your official business contact details and complete membership terms before launch.</p></section>
+<a class="btn" href="index.html">← Back to PC GYM</a>
+</main>
+<footer class="footer"><a class="brand footer-brand" href="index.html"><span class="brand-mark">PC</span><span>GYM<span class="brand-dot">.</span><small>FITNESS & PERFORMANCE</small></span></a><div class="footer-links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="index.html#contact">Contact Us</a></div><small>© <span id="year"></span> PC GYM. All rights reserved.</small><small class="creator-credit">Website crafted by <strong>PC Manu</strong> ♥</small></footer>
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body></html>'''
+with open(os.path.join(base, "privacy.html"), "w", encoding="utf-8") as f: f.write(privacy_html)
+with open(os.path.join(base, "terms.html"), "w", encoding="utf-8") as f: f.write(terms_html)
 
-  <main class="container">
-    
-    <span class="tag">Technology</span>
-    <h1>Welcome to My First Web Project</h1>
-    <div class="meta">Published on August 29, 2026 • By Author</div>
+# Policy page styling
+with open(css_path, "a", encoding="utf-8") as f:
+    f.write(r'''
+.policy-page{max-width:1000px;margin:auto;min-height:65vh}
+.policy-page h1{font:800 clamp(42px,6vw,68px) Manrope;letter-spacing:-3px;margin:0 0 12px}
+.policy-page h1 span{color:var(--blue)}
+.policy-updated{font-size:11px;color:var(--muted);margin-bottom:25px}
+.policy-notice{border:1px solid #c9dcfb;background:#f1f6ff;padding:16px 18px;border-radius:12px;font-size:12px;line-height:1.8;margin:25px 0 35px}
+.policy-page section{padding:20px 0;border-bottom:1px solid var(--line)}
+.policy-page section h2{font:800 20px Manrope;letter-spacing:-.5px;margin:0 0 10px}
+.policy-page section p{font-size:13px;line-height:1.9;color:var(--muted);margin:0;max-width:780px}
+.policy-page>.btn{margin-top:28px}
+''')
 
-    <p>
-      Creating a website from scratch is one of the most rewarding skills you can learn. 
-      By combining HTML for layout, CSS for visual polish, and a sprinkle of JavaScript, 
-      you can share ideas with the entire world.
-    </p>
+# Rebuild ZIP with all project files.
+zip_path = "/mnt/data/pc_gym_starter_v2.zip"
+with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
+    for name in sorted(os.listdir(base)):
+        path = os.path.join(base, name)
+        if os.path.isfile(path):
+            z.write(path, arcname=f"pc_gym_starter/{name}")
 
-    <div class="highlight-box">
-      <strong>Key Takeaway:</strong> You don't need fancy tools to start. A simple browser and a text file are all you need to build real web applications!
-    </div>
-
-    <p>
-      This is just the first step. You can customize the colors, change the text, 
-      and even add custom images or a full comment box down below.
-    </p>
-
-    <div class="interaction-bar">
-      <button class="like-btn" id="likeBtn" onclick="addLike()">❤️ Like</button>
-      <span id="likeCount">0 Likes</span>
-    </div>
-
-  </main>
-
-  <script>
-    let count = 0;
-    function addLike() {
-      count++;
-      document.getElementById("likeCount").innerText = count + (count === 1 ? " Like" : " Likes");
-    }
-  </script>
-
-</body>
-</html>
+print("Updated PC GYM project created.")
+print("Files:", ", ".join(sorted(os.listdir(base))))
+print("Download:", zip_path)
